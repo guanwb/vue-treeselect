@@ -636,6 +636,14 @@ export default {
       type: [ Number, String ],
       default: 999,
     },
+
+    /**
+     * 当未匹配到时是否清空输入框的值.
+     */
+    allowInputWord: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -1442,7 +1450,9 @@ export default {
       this.saveMenuScrollPosition()
       this.menu.isOpen = false
       this.toggleClickOutsideEvent(false)
-      this.resetSearchQuery()
+      if (!this.allowInputWord) {
+        this.resetSearchQuery()
+      }
       this.$emit('close', this.getValue(), this.getInstanceId())
     },
 
@@ -1781,6 +1791,9 @@ export default {
       }
 
       if (this.single && this.closeOnSelect) {
+        if (this.allowInputWord) {
+          this.resetSearchQuery()
+        }
         this.closeMenu()
 
         // istanbul ignore else
